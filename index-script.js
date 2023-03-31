@@ -207,6 +207,8 @@ function displayCartInDropdown() {
       }
       overallPrice += Number(item.price);
     });
+    const uniqueItemsArray = Object.values(uniqueItems);
+    localStorage.setItem("uniqueItems", JSON.stringify(uniqueItemsArray));
 
     const cartDropdown = document.getElementById("dropdown-cart");
     cartDropdown.innerHTML="";
@@ -261,8 +263,6 @@ function displayCartInDropdown() {
   }
 }
 
-loadContent();
-displayCartInDropdown();
 /** const cartDropdown = document.getElementById("dropdown-cart");
     cartDropdown.innerHTML = "";
     
