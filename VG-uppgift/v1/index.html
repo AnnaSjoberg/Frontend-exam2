@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Product page</title>
+  </head>
+  <body class="container" onload="showItems();showCart()">
+    <nav><div class="links-center"></div>
+      <div class="links-right">
+        <div class="dropdown">
+          <button class="dropbtn">Dropdown</button>
+          <div class="dropdown-content">
+            <a href="#">Option 1</a>
+            <a href="#">Option 2</a>
+            <a href="#">Option 3</a>
+          </div>
+        </div>
+      </div>
+      <ul>
+        <li class="dropdown">
+          <a href="#">Cart</a>
+          <ul id="cart-dropdown">
+            <li><a href="cart.html">View Cart</a></li>
+            <li><a href="#">Checkout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+    <h1>Product page</h1>
+    <div id="catalogue"></div>
+
+    <h2>Cart</h2>
+    <div id="cart"></div>
+    <h4 id="overall-price"></h4>
+    <button id="clear-cart" class="btn btn-sm btn-outline-danger">
+      Clear cart
+    </button>
+
+    <a href="cart.html">go to cart</a>
+
+    <script src="data.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>
