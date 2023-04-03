@@ -94,25 +94,34 @@ function renderCards(json) {
     price.innerHTML = `€ ${e.price.toFixed(2)}`;
     dFlex.append(price);
 
-    
     const btn = document.createElement("button");
     btn.classList.add("add-to-cart", "btn", "btn-outline-success", "p-2");
     btn.innerHTML = "Add to cart";
     btn.dataset.title = e.title;
     btn.dataset.price = e.price;
+    
     //add a listener to the button
-    btn.addEventListener("click", (e) => {
-      // retrieve current cart if it exists. If it doesn't create an empty cart
-      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    btn.addEventListener("click", (element) => {
+      let uniqueItems = JSON.parse(localStorage.getItem("uniqueItems")) || {};
 
       let newItem = {
-        title: e.target.dataset.title,
-        price: e.target.dataset.price,
+        title: element.target.dataset.title,
+        price: element.target.dataset.price,
       };
-      cart.push(newItem);
 
-      localStorage.setItem("cart", JSON.stringify(cart));
+      if (uniqueItems[newItem.title]) {
+        uniqueItems[newItem.title].quantity += 1;
+      } else {
+        uniqueItems[newItem.title] = { ...newItem, quantity: 1 };
+      }
+
+      localStorage.setItem("uniqueItems", JSON.stringify(uniqueItems));
       displayCartInDropdown();
+
+      let overallPrice = 0;
+      Object.values(uniqueItems).forEach((item) => {
+        overallPrice += Number(item.price) * item.quantity;
+      });
     });
     dFlex.append(btn);
 
@@ -191,107 +200,53 @@ function renderCards(json) {
 }
 
 function displayCartInDropdown() {
-
   // retrieve items from the cart
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  const uniqueItems = {};
+  const uniqueItems = JSON.parse(localStorage.getItem("uniqueItems")) || {};
   let overallPrice = 0;
 
-  if (cart.length) {
-    // group items by title, and add their cost to overallPrice
-    cart.forEach((item) => {
-      if (uniqueItems[item.title]) {
-        uniqueItems[item.title].quantity += 1;
-      } else {
-        uniqueItems[item.title] = { ...item, quantity: 1 };
-      }
-      overallPrice += Number(item.price);
-    });
-    const uniqueItemsArray = Object.values(uniqueItems);
-    localStorage.setItem("uniqueItems", JSON.stringify(uniqueItemsArray));
+  const cartDropdown = document.getElementById("dropdown-cart");
+  cartDropdown.innerHTML = "";
 
-    const cartDropdown = document.getElementById("dropdown-cart");
-    cartDropdown.innerHTML="";
-    
-    const items = document.createElement("div");
-    items.classList.add("items-in-cart", 'dropdown-item');
+  const items = document.createElement("div");
+  items.classList.add("items-in-cart", "dropdown-item");
 
-    
-    for (const key in uniqueItems) {
-      let listItem = document.createElement("li");
-      listItem.classList.add('ind-item');
+  for (const key in uniqueItems) {
+    let listItem = document.createElement("li");
+    listItem.classList.add("ind-item");
 
-      if (uniqueItems.hasOwnProperty(key)) {
-        const item = uniqueItems[key];
-        const text = `${item.title} x ${item.quantity}`;
-        listItem.textContent = text;
-    
-        items.appendChild(listItem);
-        
-      }
-    }
-    cartDropdown.appendChild(items); 
+    listItem.innerHTML = `${uniqueItems[key].title} x ${uniqueItems[key].quantity}`;
 
+    items.appendChild(listItem);
 
-    const btnGroup = document.createElement("div");
-    btnGroup.classList.add('button-group');
-    const editBtn = document.createElement("button");
-    editBtn.classList.add("edit-btn", "btn", "btn-outline-info", "btn-sm", "p-2", "m-2");
-    editBtn.setAttribute('aria-label', 'edit-cart');
-    editBtn.innerHTML = "Edit order";
-    editBtn.addEventListener("click", function () {
-      window.location.href = "cart.html";
-    });
-    const checkoutBtn = document.createElement("button");
-    checkoutBtn.classList.add("checkout-btn", "btn", "btn-outline-danger", "btn-sm", "p-2", "m-2");
-    checkoutBtn.setAttribute('aria-label', 'checkout');
-    checkoutBtn.innerHTML = "Checkout";
-    checkoutBtn.addEventListener("click", function () {
-      window.location.href = "checkout.html";
-    });
-
-    btnGroup.appendChild(editBtn);
-    btnGroup.appendChild(checkoutBtn);
-
-    cartDropdown.appendChild(btnGroup);
-
-    const sumItem = document.createElement("div");
-    sumItem.classList.add("sum-item");
-
-    sumItem.innerHTML = `Overall Price: € ${overallPrice.toFixed(2)}`;
-    cartDropdown.append(sumItem);
+    overallPrice += Number(uniqueItems[key].price) * uniqueItems[key].quantity;
   }
+
+  cartDropdown.appendChild(items);
+
+  const btnGroup = document.createElement("div");
+  btnGroup.classList.add("button-group", "btn-group");
+  const editBtn = document.createElement("button");
+  editBtn.classList.add("edit-btn","btn","btn-outline-info","btn-sm","p-2","m-2");
+  editBtn.setAttribute("aria-label", "edit-cart");
+  editBtn.innerHTML = "Edit order";
+  editBtn.addEventListener("click", () => {
+    window.location.href = "cart.html";
+  });
+  const checkoutBtn = document.createElement("button");
+  checkoutBtn.classList.add("checkout-btn","btn","btn-outline-danger","btn-sm","p-2","m-2");
+  checkoutBtn.setAttribute("aria-label", "checkout");
+  checkoutBtn.innerHTML = "Checkout";
+  checkoutBtn.addEventListener("click", () => {
+    window.location.href = "checkout.html";
+  });
+
+  btnGroup.appendChild(editBtn);
+  btnGroup.appendChild(checkoutBtn);
+
+  cartDropdown.appendChild(btnGroup);
+
+  const sumItem = document.createElement("div");
+  sumItem.classList.add("sum-item");
+  sumItem.innerHTML = `Overall Price: € ${overallPrice.toFixed(2)}`;
+  cartDropdown.append(sumItem);
 }
-
-/** const cartDropdown = document.getElementById("dropdown-cart");
-    cartDropdown.innerHTML = "";
-    
-
-
-    for (const key in uniqueItems) {
-      let listItem = document.createElement("li");
-      listItem.classList.add('ind-item');
-
-      if (uniqueItems.hasOwnProperty(key)) {
-        const item = uniqueItems[key];
-        const text = `${item.title} x ${item.quantity}`;
-        listItem.textContent = text;
-      }
-    }
-    
-    
-    
-        const cartDropdown = document.getElementById("dropdown-cart");
-    cartDropdown.innerHTML = "";
-    
-    for (const key in uniqueItems) {
-      let listItem = document.createElement("li");
-      listItem.classList.add('ind-item');
-
-      if (uniqueItems.hasOwnProperty(key)) {
-        const item = uniqueItems[key];
-        const text = `${item.title} x ${item.quantity}`;
-        listItem.textContent = text;
-        cartDropdown.appendChild(listItem);
-      }
-    }*/

@@ -1,6 +1,6 @@
 function showCartTable() {
   // retrieve items from local storage
-  let uniqueItems = JSON.parse(localStorage.getItem("uniqueItems")) || [];
+  let uniqueItems = JSON.parse(localStorage.getItem("uniqueItems")) || {};
 
   
   // clear the tablebody before adding items
@@ -14,8 +14,8 @@ function showCartTable() {
   let overallPrice = 0;
 
 
-  uniqueItems.forEach((item) => {
-    
+  for (const title in uniqueItems) {
+    const item = uniqueItems[title];
       const row = cartTableBody.insertRow();
       const titleCell = row.insertCell();
       titleCell.textContent = item.title;
@@ -37,22 +37,20 @@ function showCartTable() {
       editCell.appendChild(plusBtn);
 
       plusBtn.addEventListener("click", () => {
-         // Find the index of the item
-        const index = uniqueItems.findIndex((item) => item.title === titleCell.textContent);
-
+         
         // Update the quantity of the item
-        uniqueItems[index].quantity++;
+        item.quantity++;
 
-        // Save the updated array to localStorage
+        // Save the updated object to localStorage
         localStorage.setItem("uniqueItems", JSON.stringify(uniqueItems));
-        updateMainCart(uniqueItems);  //update the 'cart' object in localStorage
+      
 
         // Update the quantity cell and total cell in the table
-        quantityCell.textContent = uniqueItems[index].quantity;
-        totalCell.textContent = `€ ${Number(uniqueItems[index].price * uniqueItems[index].quantity).toFixed(2)}`;
+        quantityCell.textContent = item.quantity;
+        totalCell.textContent = `€ ${Number(item.price * item.quantity).toFixed(2)}`;
 
         // Update the overall price
-        overallPrice += Number(uniqueItems[index].price);
+        overallPrice += Number(item.price);
         priceDiv.innerHTML = `Overall Price: € ${overallPrice.toFixed(2)}`;
       });
 
@@ -62,20 +60,19 @@ function showCartTable() {
       minusBtn.setAttribute("aria-label", "minus-one");
       editCell.appendChild(minusBtn);
       minusBtn.addEventListener("click", () => {
-        const index = uniqueItems.findIndex((item) => item.title === titleCell.textContent);
-        
-        if (uniqueItems[index].quantity > 1) {
-          uniqueItems[index].quantity--;
+
+        if (item.quantity > 1) {
+          item.quantity--;
         } else {
-          uniqueItems.splice(index, 1); //remove item from the array
-          row.remove();                 //remove the row from the table
+          delete uniqueItems[title];
+          row.remove();                 //removes the row from the table
         }
         localStorage.setItem("uniqueItems", JSON.stringify(uniqueItems));
-        updateMainCart(uniqueItems);
+       
         
-        quantityCell.textContent = uniqueItems[index].quantity;
-        totalCell.textContent = `€ ${Number(uniqueItems[index].price * uniqueItems[index].quantity).toFixed(2)}`;
-        overallPrice -= Number(uniqueItems[index].price);
+        quantityCell.textContent = item.quantity;
+        totalCell.textContent = `€ ${Number(item.price * item.quantity).toFixed(2)}`;
+        overallPrice -= Number(item.price);
         priceDiv.innerHTML = `Overall Price: € ${overallPrice.toFixed(2)}`;
       });
       
@@ -87,21 +84,19 @@ function showCartTable() {
       removeCell.appendChild(removeButton);
       
       removeButton.addEventListener("click",  () => {
-        const index = uniqueItems.findIndex((item) => item.title === titleCell.textContent);
-        uniqueItems.splice(index, 1); //remove item from the array
+        delete uniqueItems[title];
         localStorage.setItem("uniqueItems", JSON.stringify(uniqueItems));
-        updateMainCart(uniqueItems);
         showCartTable();
         });
    overallPrice += Number(item.price * item.quantity); 
-  });
+  };
 
   // cartDiv.innerHTML = cartcontent
   priceDiv.innerHTML = `Overall Price: € ${overallPrice.toFixed(2)}`;
 
   // adds an event listener to clear our cart
   document.getElementById("clear-cart").addEventListener("click", ()=>{
-    localStorage.removeItem("cart");
+    
     localStorage.removeItem("uniqueItems");
     showCartTable();
   });
@@ -109,18 +104,4 @@ function showCartTable() {
   document.getElementById("checkout-btn").addEventListener("click", () => {
         window.location.href = 'checkout.html';
   });
-}
-
-function updateMainCart (uniqueItems) {
-  const cart = [];
-  uniqueItems.forEach((item) => {
-    for (i=0; i<item.quantity; i++){
-      let newItem = {
-        title: item.title,
-        price: item.price,
-      };
-      cart.push(newItem);
-    }
-  });
-localStorage.setItem("cart", JSON.stringify(cart));
 }
