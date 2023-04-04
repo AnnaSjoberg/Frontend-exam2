@@ -62,7 +62,10 @@ function showCartTable() {
           row.remove();                 //removes the row from the table
         }
         localStorage.setItem("uniqueItems", JSON.stringify(uniqueItems));
-       
+        
+        if (Object.keys(uniqueItems).length === 0){
+          localStorage.removeItem('uniqueItems');
+        }
         
         quantityCell.textContent = item.quantity;
         totalCell.textContent = `€ ${Number(item.price * item.quantity).toFixed(2)}`;
@@ -79,7 +82,11 @@ function showCartTable() {
       
       removeButton.addEventListener("click",  () => {
         delete uniqueItems[title];
+        if (Object.keys(uniqueItems).length === 0){
+          localStorage.removeItem('uniqueItems');
+        } else {
         localStorage.setItem("uniqueItems", JSON.stringify(uniqueItems));
+      }
         showCartTable();
         });
    overallPrice += Number(item.price * item.quantity); 
