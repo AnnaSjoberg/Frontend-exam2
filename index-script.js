@@ -224,7 +224,7 @@ function displayCartInDropdown() {
   cartDropdown.appendChild(items);
 
   const btnGroup = document.createElement("div");
-  btnGroup.classList.add("button-group", "btn-group");
+  btnGroup.classList.add("dropdown-foot");
   const editBtn = document.createElement("button");
   editBtn.classList.add("edit-btn","btn","btn-outline-info","btn-sm","p-2","m-2");
   editBtn.setAttribute("aria-label", "edit-cart");
@@ -240,13 +240,13 @@ function displayCartInDropdown() {
     window.location.href = "checkout.html";
   });
 
-  btnGroup.appendChild(editBtn);
-  btnGroup.appendChild(checkoutBtn);
-
+  
   cartDropdown.appendChild(btnGroup);
-
-  const sumItem = document.createElement("div");
-  sumItem.classList.add("sum-item");
-  sumItem.innerHTML = `Overall Price: € ${overallPrice.toFixed(2)}`;
-  cartDropdown.append(sumItem);
+  
+  const sumItem = document.createElement("p");
+  sumItem.classList.add("sum-p");
+  sumItem.innerHTML = `€ ${overallPrice.toFixed(2)}`;
+  btnGroup.appendChild(editBtn);
+  btnGroup.append(sumItem);
+  btnGroup.appendChild(checkoutBtn);
 }

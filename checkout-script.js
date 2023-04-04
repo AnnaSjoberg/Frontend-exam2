@@ -125,34 +125,12 @@ completeBtn.addEventListener("click", (e) => {
     document.querySelector(".error-message").innerHTML +=
       "Please add at least one product";
   } else if (
-    checkValid(
-      name.match(validRegexName) && 1 < name.length && name.length < 51,
-      "full-name",
-      name
-    ) === true &&
-    checkValid(
-      street.match(validRegexStreet) && street.length < 51 && street.length > 3,
-      "street-address",
-      street
-    ) === true &&
-    checkValid(postal.match(validRegexPostal), "postal-code", postal) ===
-      true &&
-    checkValid(
-      city.match(validRegexCity) && city.length < 51 && city.length > 1,
-      "city",
-      city
-    ) === true &&
-    checkValid(
-      mail.match(validRegexMail) && mail.length < 51,
-      "e-mail",
-      mail
-    ) === true &&
-    checkValid(
-      phone.match(validRegexPhone) && phone.length < 51,
-      "phone-number",
-      phone
-    ) === true
-  ) {
+    checkValid( name.match(validRegexName) && 1 < name.length && name.length < 51, "full-name", name) === true &&
+    checkValid(street.match(validRegexStreet) && street.length < 51 && street.length > 3, "street-address", street) === true &&
+    checkValid(postal.match(validRegexPostal), "postal-code", postal) === true &&
+    checkValid(city.match(validRegexCity) && city.length < 51 && city.length > 1, "city", city) === true &&
+    checkValid( mail.match(validRegexMail) && mail.length < 51, "e-mail", mail) === true &&
+    checkValid(phone.match(validRegexPhone) && phone.length < 51, "phone-number", phone) === true) {
    
     modal.classList.add("show");
     modal.style.display = "block";
@@ -163,8 +141,7 @@ completeBtn.addEventListener("click", (e) => {
     document.body.classList.add("modal-open");
   } else {
     document.querySelector(".error-message").innerHTML = "";
-    document.querySelector(".error-message").innerHTML +=
-      "Please fill out all fields correctly";
+    document.querySelector(".error-message").innerHTML += "Please fill out all fields correctly";
   }
 });
 
@@ -213,75 +190,3 @@ function loadOrder() {
     }
   }
 }
-/**
-const cancelModal = document.createElement('div');
-cancelModal.className = "modal fade modal-sm";
-cancelModal.setAttribute("id", `cancel-modal`);
-cancelModal.setAttribute("tabindex", "-1");
-cancelModal.setAttribute("role", "dialog");
-cancelModal.setAttribute("aria-labelledby", "exampleModalCenterTitle");
-cancelModal.setAttribute("aria-hidden", "true");
-
- //skapa modal-dialog
- let modalDialog = document.createElement("div");
- modalDialog.className = "modal-dialog modal-dialog-centered";
- modalDialog.setAttribute("role", "document");
- cancelModal.append(modalDialog);
-
- //skapa modal content
- let modalContent = document.createElement("div");
- modalContent.className = "modal-content";
- modalDialog.append(modalContent);
-
- //skapa modalHeader
- let modalHeader = document.createElement("div");
- modalHeader.className = "modal-header";
- modalContent.append(modalHeader);
-
- //skapa modal-title
- let modalTitle = document.createElement("h5");
- modalTitle.className = "modal-title";
- modalTitle.setAttribute("id", "exampleModalLongTitle");
- modalTitle.innerHTML = 'Cancel purchase?';
- modalHeader.append(modalTitle);
-
- //skapa modalbody
- let modalBody = document.createElement("div");
- modalBody.className = "modal-body";
- modalBody.innerHTML = 'Do you want to cancel your purchase? Your cart will be emptied and you will be redirected to the Product page.';
- modalContent.append(modalBody);
-
- //skapa modal-footer
- let modalFooter = document.createElement("div");
- modalFooter.className = "modal-footer";
- modalContent.append(modalFooter);
-
-cancelBtn.addEventListener('click', () =>{
-  cancelModal.classList.add('show');
-  cancelModal.style.display='block';
-  document.body.classList.add('modal-open');
-
-});
-const yesBtn = document.createElement('button');
-yesBtn.type = 'button';
-yesBtn.classList.add('btn', 'btn-danger');
-yesBtn.textContent='Yes';
-modalFooter.append(yesBtn);
-
-const noBtn = document.createElement('button');
-noBtn.type = 'button';
-noBtn.classList.add('btn', 'btn-secondary');
-noBtn.textContent='No';
-modalFooter.append(noBtn);
-
-yesBtn.addEventListener('click', ()=>{
-localStorage.clear();
-window.location.href = 'index.html';
-});
-
-noBtn.addEventListener('click', ()=>{
-  cancelModal.style.display = 'none';
-});
-
-document.body.appendChild(cancelModal);
- */

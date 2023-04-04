@@ -37,19 +37,13 @@ function showCartTable() {
       editCell.appendChild(plusBtn);
 
       plusBtn.addEventListener("click", () => {
-         
-        // Update the quantity of the item
-        item.quantity++;
+        item.quantity++;   // Update the quantity of the item
 
-        // Save the updated object to localStorage
-        localStorage.setItem("uniqueItems", JSON.stringify(uniqueItems));
+        localStorage.setItem("uniqueItems", JSON.stringify(uniqueItems)); // Save the updated object to localStorage
       
-
-        // Update the quantity cell and total cell in the table
+        // Update the view on the page
         quantityCell.textContent = item.quantity;
         totalCell.textContent = `€ ${Number(item.price * item.quantity).toFixed(2)}`;
-
-        // Update the overall price
         overallPrice += Number(item.price);
         priceDiv.innerHTML = `Overall Price: € ${overallPrice.toFixed(2)}`;
       });
